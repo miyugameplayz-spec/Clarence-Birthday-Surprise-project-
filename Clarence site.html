@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>THE CLARENCE SITE</title>
+
+<style>
+:root{
+  --accent:#7b6cff;
+  --accent2:#a594ff;
+  --overlay:rgba(123,108,255,.75);
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:system-ui,sans-serif;
+  background:#f6f5fb;
+  overflow-x:hidden;
+}
+img,video{width:100%;display:block}
+
+/* HEADER */
+header{
+  position:sticky;
+  top:0;
+  z-index:1000;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  color:#fff;
+  padding:14px 26px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+nav a{
+  margin:0 14px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.top-nav a{
+  position:relative;
+  padding:10px 14px;
+  text-decoration:none;
+  font-weight:600;
+  transition:color .25s ease;
+  color:#fff;              
+  font-weight:700;            
+  font-size:inherit;          
+  text-decoration:none;
+}
+
+.top-nav a::after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:4px;
+  width:0%;
+  height:3px;
+  background:#8c7cff;
+  border-radius:4px;
+  transition:.3s ease;
+}
+
+.top-nav a:hover::after,
+.top-nav a.active::after{
+  width:100%;
+}
+
+.top-nav a.active{
+  color:#8c7cff;
+}
+
+.play-btn{
+  background:#fff;
+  color:var(--accent);
+  padding:8px 20px;
+  border-radius:999px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.hero{
+  position:relative;
+  height:100vh; 
+  overflow:hidden;
+  background:url("https://media.discordapp.net/attachments/1445757341097136150/1451199610356764755/Clarence_Ethan_Pogi_Derby_4.png?ex=69454e75&is=6943fcf5&hm=b11edb3de0de307b066f22dcabd38508d44664e4586a902619bcd2863d3d3091&=&format=webp&quality=lossless&width=1438&height=629") center/cover;
+}
+.hero video{
+  position:absolute;
+  inset:0;
+  height:100%;
+  object-fit:cover;
+}
+.hero::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(
+    to bottom,
+    rgba(246,245,251,0) 0%,
+    rgba(246,245,251,0) 78%,
+    rgba(246,245,251,0.4) 85%,
+    rgba(246,245,251,0.8) 92%,
+    #f6f5fb 100%
+  );
+  pointer-events:none;
+}
+
+section{
+  padding:100px 8vw;
+  opacity:0;
+  transform:translateY(40px);
+  transition:.9s ease;
+}
+section.show{opacity:1;transform:none}
+
+.section-title{
+  display:inline-block;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  color:#fff;
+  padding:10px 28px;
+  font-size:26px;
+  font-weight:900;
+  transform:skewX(-12deg);
+  margin-bottom:32px;
+}
+
+.news-section{
+  position:relative;
+  padding:60px 0;
+  display:flex;
+  justify-content:center;
+}
+
+.news-label{
+  position:absolute;
+  top:-18px;
+  left:20px;
+  background:#ff7ac8;
+  color:#fff;
+  font-weight:900;
+  padding:10px 28px;
+  font-size:26px;
+  letter-spacing:.5px;
+  transform:skewX(-14deg) translateX(-120px);
+  opacity:0;
+  box-shadow:0 6px 14px rgba(0,0,0,.2);
+  animation:newsSlideIn .9s cubic-bezier(.25,.8,.25,1) forwards;
+}
+
+.news-label::before{
+  content:"";
+  position:absolute;
+  left:-16px;
+  top:0;
+  width:16px;
+  height:100%;
+  background:#e45fae;
+}
+
+@keyframes newsSlideIn{
+  to{
+    transform:skewX(-14deg) translateX(0);
+    opacity:1;
+  }
+}
+
+.news-box{
+  background:#ffe9f3;
+  border-radius:16px;
+  width:600px;
+  max-width:92%;
+  padding:16px;
+  box-shadow:0 10px 25px rgba(0,0,0,.15);
+}
+
+.news-scroll{
+  max-height:360px;
+  overflow-y:auto;
+}
+
+.news-scroll::-webkit-scrollbar{width:6px}
+.news-scroll::-webkit-scrollbar-thumb{
+  background:#ff7ac8;
+  border-radius:10px;
+}
+
+/* item */
+.news-item{
+  background:#fff;
+  border-radius:12px;
+  display:flex;
+  gap:12px;
+  padding:10px;
+  margin-bottom:12px;
+  align-items:center;
+}
+
+.news-image{
+  position:relative;
+  width:140px;
+  height:80px;
+  flex-shrink:0;
+  border-radius:8px;
+  overflow:hidden;
+}
+.news-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.news-overlay{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+  opacity:0;
+  transition:.3s ease;
+}
+.news-image:hover .news-overlay{opacity:1}
+
+.news-more{
+  display:flex;
+  justify-content:center;
+  margin-top:12px;
+}
+.news-more button{
+  background:#ff7ac8;
+  color:#fff;
+  border:none;
+  padding:10px 26px;
+  border-radius:999px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.news-box{
+  width:760px;
+}
+
+.news-item{
+  flex-direction:column;        
+  align-items:stretch;
+  padding:0;
+  overflow:hidden;
+}
+
+.news-image{
+  width:100%;
+  height:400px;                 
+  border-radius:0;
+}
+
+.news-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.news-overlay{
+  font-size:16px;
+}
+
+.news-content{
+  padding:14px 16px 18px;
+}
+
+.news-image img:not([src]),
+.news-image img[src=""]{
+  display:none;
+}
+
+/* ABOUT */
+.about-section{
+  position:relative;
+  padding:140px 8vw 160px;
+  background:
+    linear-gradient(135deg,#3b6cff 0%,#6fb5ff 60%,#f6f5fb 100%);
+  overflow:hidden;
+}
+
+.about-section::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(160deg,rgba(59,108,255,.85) 0 18%,transparent 18% 100%),
+    linear-gradient(-20deg,rgba(255,122,200,.9) 0 16%,transparent 16% 100%);
+  z-index:0;
+}
+
+.about-section::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:url("https://raw.githubusercontent.com/miyugameplayz-spec/Clarence-Birthday-Surprise-project-/refs/heads/main/confetti.png") repeat;
+  opacity:.15;
+  pointer-events:none;
+}
+
+.about-section .section-title{
+  position:relative;
+  z-index:2;
+  margin-bottom:40px;
+  background:#fff;
+  color:#3b6cff;
+  box-shadow:0 10px 22px rgba(0,0,0,.18);
+}
+
+.about-video-wrapper{
+  width:100%;
+  aspect-ratio:16/9;
+  border-radius:20px;
+  overflow:hidden;
+}
+
+.about-video-wrapper iframe{
+  width:100%;
+  height:100%;
+  border:0;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 2000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.8);
+  justify-content: center;
+  align-items: center;
+}
+.modal-content {
+  position: relative;
+  width: 90%;
+  max-width: 800px;
+}
+.modal video {
+  width: 100%;
+  border-radius: 12px;
+}
+.modal .close {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 30px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.about-video-square{
+  width:100%;
+  aspect-ratio:1 / 1;   /* equal height and width */
+  border-radius:20px;
+  overflow:hidden;
+}
+
+.about-video-square iframe,
+.about-video-square video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border:0;
+}
+
+.about-card{
+  position:relative;
+  z-index:2;
+  max-width:980px;
+  margin:auto;
+  background:#fff;
+  border-radius:26px;
+  padding:22px;
+  box-shadow:0 30px 60px rgba(0,0,0,.35);
+  transform:skewX(-6deg);
+}
+
+.about-card video{
+  width:100%;
+  border-radius:20px;
+  display:block;
+  transform:skewX(6deg);
+}
+
+/* ========= CHARACTERS ========= */
+.char-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+  gap:24px;
+}
+.char-card{
+  background:#fff;
+  border-radius:16px;
+  padding:10px;
+  text-align:center;
+  cursor:pointer;
+  transition:.25s;
+  box-shadow:0 10px 22px rgba(0,0,0,.12);
+}
+.char-card:hover{transform:translateY(-6px)}
+.char-card img{border-radius:12px;margin-bottom:8px}
+.char-card strong{font-size:14px}
+.char-card small{font-size:12px;opacity:.6}
+
+.char-profile{display:none}
+.back-btn{
+  background:var(--accent);
+  color:#fff;
+  border:none;
+  padding:10px 22px;
+  border-radius:999px;
+  font-weight:800;
+  cursor:pointer;
+  margin-bottom:30px;
+}
+.profile-layout{
+  background:#fff;
+  border-radius:26px;
+  padding:40px;
+  display:grid;
+  grid-template-columns:1fr 1.2fr;
+  gap:40px;
+}
+.profile-art img{max-height:520px;object-fit:contain}
+.profile-info h2{font-size:36px}
+.profile-quote{color:#ff5db1;font-weight:800;margin:18px 0}
+.profile-stats{
+  display:grid;
+  grid-template-columns:120px 1fr;
+  gap:6px;
+  margin-bottom:20px;
+}
+.profile-video{
+  border-radius:20px;
+  overflow:hidden;
+  box-shadow:0 14px 28px rgba(0,0,0,.25);
+}
+
+/* MEDIA */
+.media-row{display:flex;gap:30px}
+.media-btn{
+  flex:1;
+  height:380px;
+  border-radius:28px;
+  overflow:hidden;
+  position:relative;
+  transform:skewX(-6deg);
+}
+.media-btn img{height:100%;object-fit:cover}
+
+/* ===== CHARACTER NAV ARROWS ===== */
+.char-nav{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+.char-arrow{
+  background:#fff;
+  border:none;
+  font-size:42px;
+  font-weight:900;
+  width:64px;
+  height:64px;
+  border-radius:50%;
+  box-shadow:0 10px 25px rgba(0,0,0,.25);
+  cursor:pointer;
+  transition:.25s ease;
+}
+
+.char-arrow:hover{
+  transform:scale(1.1);
+}
+
+.char-arrow.left{margin-right:auto}
+.char-arrow.right{margin-left:auto}
+
+.profile-layout{
+  background:#fff;
+  border-radius:26px;
+  padding:40px;
+  display:grid;
+  grid-template-columns:1fr 1.2fr;
+  gap:50px;
+}
+
+.profile-info p{
+  margin-bottom:26px;
+  line-height:1.6;
+}
+
+/* VIDEO CARD STYLE */
+.profile-video{
+  margin-top:30px;
+  max-width:520px;
+  border-radius:22px;
+  overflow:hidden;
+  box-shadow:0 18px 36px rgba(0,0,0,.3);
+}
+
+.profile-video video{
+  width:100%;
+  height:auto;
+  display:block;
+}
+
+.profile-video iframe{
+  width:100%;
+  aspect-ratio:16 / 9;
+  border:0;
+  display:block;
+}
+
+/* GALLERY */
+.gallery{
+  display:flex;
+  gap:20px;
+  overflow-x:auto;
+}
+.gallery img{height:240px;border-radius:18px}
+
+.gallery-wrapper{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-top:40px;
+}
+
+.gallery-viewport{
+  width:100%;
+  max-width:1100px;
+  overflow:hidden;
+}
+
+.gallery-track{
+  display:flex;
+  transition:transform .5s ease;
+}
+
+.gallery-card{
+  flex:0 0 calc(100% / 3);
+  padding:14px;
+}
+
+.gallery-card img{
+  width:100%;
+  height:350px;
+  object-fit:cover;
+  border-radius:16px;
+  box-shadow:0 12px 24px rgba(0,0,0,.2);
+}
+
+.gallery-arrow{
+  background:#fff;
+  border:none;
+  font-size:42px;
+  font-weight:900;
+  width:64px;
+  height:64px;
+  border-radius:50%;
+  box-shadow:0 12px 28px rgba(0,0,0,.25);
+  cursor:pointer;
+  transition:.25s ease;
+}
+
+.gallery-arrow:hover{
+  transform:scale(1.1);
+}
+
+.gallery-arrow.left{margin-right:16px}
+.gallery-arrow.right{margin-left:16px}
+
+@media (max-width:900px){
+  .gallery-card{flex:0 0 100%}
+}
+
+
+footer{text-align:center;padding:30px;color:#777}
+</style>
+</head>
+
+<body>
+
+<header>
+  <strong>🎂 Happy Birthday!</strong>
+  <nav class="top-nav">
+  <a href="#news">News</a>
+  <a href="#characters">Characters</a>
+  <a href="#gallery">Gallery</a>
+</nav>
+  <button class="play-btn">Play</button>
+</header>
+
+<div class="hero">
+  <video autoplay muted loop><source src="hero.mp4"></video>
+</div>
+
+<section class="news-section" id="news">
+  <div class="news-label">News</div>
+
+  <div class="news-box">
+    <div class="news-scroll">
+
+      <article class="news-item">
+        <div class="news-image">
+          <img src="https://raw.githubusercontent.com/miyugameplayz-spec/Clarence-Birthday-Surprise-project-/refs/heads/main/20240522_084407.jpg">
+          <div class="news-overlay"></div>
+        </div>
+      </article>
+
+      <article class="news-item">
+        <div class="news-image">
+          <img src="https://raw.githubusercontent.com/miyugameplayz-spec/Clarence-Birthday-Surprise-project-/refs/heads/main/20240530_074447.jpg">
+          <div class="news-overlay"></div>
+        </div>
+      </article>
+
+      <article class="news-item">
+        <div class="news-image">
+          <img src="http://raw.githubusercontent.com/miyugameplayz-spec/Clarence-Birthday-Surprise-project-/refs/heads/main/20250204_115808.jpg">
+          <div class="news-overlay"></div>
+        </div>
+      </article>
+ 
+      <article class="news-item">
+  <div class="news-image">
+    <img src="https://raw.githubusercontent.com/miyugameplayz-spec/Clarence-Birthday-Surprise-project-/refs/heads/main/imagies.png" alt="News 4">
+    <div class="news-overlay"></div>
+  </div>
+</article>
+
+<article class="news-item">
+  <div class="news-image">
+    <img src="https://raw.githubusercontent.com/miyugameplayz-spec/Clarence-Birthday-Surprise-project-/refs/heads/main/images.png" alt="News 5">
+    <div class="news-overlay">Happy bday from - LALA</div>
+  </div>
+</article>
+
+    </div>
+
+    <div class="news-more">
+      <button class="view-more" onclick="location.href='#gallery'">
+  View More →
+</button>
+
+    </div>
+  </div>
+</section>
+
+<section id="about" class="about-section">
+  <div class="section-title">About</div>
+<div class="about-card">
+  <div class="about-video-square">
+    <iframe
+      src="https://drive.google.com/file/d/1BQcsIBB300XOCT0yHdsgGEa6ihFZ9HM_/preview"
+      allow="autoplay"
+      allowfullscreen>
+    </iframe>
+  </div>
+</div>
+
+</section>
+
+<!-- Video Modal -->
+<div id="videoModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <video id="modalVideo" controls autoplay>
+      <source src="" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+</div>
+
+<!-- CHARACTERS -->
+<section id="characters">
+  <div class="section-title">Characters</div>
+
+  <div class="char-grid" id="charGrid"></div>
+
+  <div class="char-profile" id="charProfile">
+    <button class="back-btn" onclick="backToGrid()">← Back</button>
+    <div class="char-nav">
+  <button class="char-arrow" onclick="prevChar()">‹</button>
+  <button class="char-arrow" onclick="nextChar()">›</button>
+</div>
+
+    <div class="profile-layout" id="profileContent"></div>
+  </div>
+</section>
+
+<section id="gallery">
+  <div class="section-title">Gallery</div>
+
+  <div class="gallery-wrapper">
+    <button class="gallery-arrow left" onclick="prevGallery()">‹</button>
+
+    <div class="gallery-viewport">
+      <div class="gallery-track" id="galleryTrack">
+        <div class="gallery-card"><img src="https://raw.githubusercontent.com/miyugameplayz-spec/Clarence-Birthday-Surprise-project-/refs/heads/main/20240522_084407.jpg"></div>
+
+        <div class="gallery-card"><img src="https://raw.githubusercontent.com/miyugameplayz-spec/Clarence-Birthday-Surprise-project-/refs/heads/main/20240530_074447.jpg"></div>
+
+        <div class="gallery-card"><img src="http://raw.githubusercontent.com/miyugameplayz-spec/Clarence-Birthday-Surprise-project-/refs/heads/main/20250204_115808.jpg"></div>
+
+        <div class="gallery-card"><img src="https://raw.githubusercontent.com/miyugameplayz-spec/Clarence-Birthday-Surprise-project-/refs/heads/main/20250924_094927.jpg"></div>
+
+        <div class="gallery-card"><img src="https://raw.githubusercontent.com/miyugameplayz-spec/Clarence-Birthday-Surprise-project-/refs/heads/main/1000004304.png"></div>
+
+        <div class="gallery-card"><img src="https://raw.githubusercontent.com/miyugameplayz-spec/Clarence-Birthday-Surprise-project-/refs/heads/main/IMG_20250706_214218_041.jpg"></div>
+
+        <div class="gallery-card"><img src="https://raw.githubusercontent.com/miyugameplayz-spec/Clarence-Birthday-Surprise-project-/refs/heads/main/IMG20250509131835.jpg"></div>
+
+        <div class="gallery-card"><img src="https://raw.githubusercontent.com/miyugameplayz-spec/Clarence-Birthday-Surprise-project-/refs/heads/main/IMG20241121121643.jpg"></div>
+
+        <div class="gallery-card"><img src="https://raw.githubusercontent.com/miyugameplayz-spec/Clarence-Birthday-Surprise-project-/refs/heads/main/IMG20241121121641.jpg"></div>
+
+        <div class="gallery-card"><img src="https://raw.githubusercontent.com/miyugameplayz-spec/Clarence-Birthday-Surprise-project-/refs/heads/main/20251209_125725.jpg"></div>
+
+        <div class="gallery-card"><img src="https://raw.githubusercontent.com/miyugameplayz-spec/Clarence-Birthday-Surprise-project-/refs/heads/main/20251011_145220.jpg"></div>
+
+        <div class="gallery-card"><img src="https://raw.githubusercontent.com/miyugameplayz-spec/Clarence-Birthday-Surprise-project-/refs/heads/main/20251011_145216.jpg"></div>
+
+        <div class="gallery-card"><img src="https://raw.githubusercontent.com/miyugameplayz-spec/Clarence-Birthday-Surprise-project-/refs/heads/main/20250321_104752.jpg"></div>
+
+        <div class="gallery-card"><img src="https://raw.githubusercontent.com/miyugameplayz-spec/Clarence-Birthday-Surprise-project-/refs/heads/main/IMG_9443.PNG"></div>
+
+        <div class="gallery-card"><img src="https://raw.githubusercontent.com/miyugameplayz-spec/Clarence-Birthday-Surprise-project-/refs/heads/main/Screenshot%202025-12-15%20200422.png"></div>
+      </div>
+    </div>
+
+    <button class="gallery-arrow right" onclick="nextGallery()">›</button>
+  </div>
+</section>
+
+<footer>Made by lalaloops024 (Jaela Palestroque) 💜</footer>
+
+<script>
+const navLinks = document.querySelectorAll(".top-nav a");
+const sections = [...navLinks].map(link =>
+  document.querySelector(link.getAttribute("href"))
+);
+
+window.addEventListener("scroll", () => {
+  let current = "";
+
+  sections.forEach(section => {
+    const sectionTop = section.offsetTop - 120;
+    if (scrollY >= sectionTop) {
+      current = section.getAttribute("id");
+    }
+  });
+
+  navLinks.forEach(link => {
+    link.classList.remove("active");
+    if (link.getAttribute("href") === `#${current}`) {
+      link.classList.add("active");
+    }
+  });
+});
+
+const modal = document.getElementById("videoModal");
+const modalVideo = document.getElementById("modalVideo");
+const modalClose = modal.querySelector(".close");
+
+function openVideo(src) {
+  modalVideo.src = src;
+  modal.style.display = "flex";
+  modalVideo.play();
+}
+
+modalClose.onclick = () => {
+  modal.style.display = "none";
+  modalVideo.pause();
+  modalVideo.src = "";
+};
+
+window.onclick = (e) => {
+  if (e.target == modal) {
+    modal.style.display = "none";
+    modalVideo.pause();
+    modalVideo.src = "";
+  }
+};
+
+let currentCharIndex = 0;
+
+/* hook into existing openChar */
+const originalOpenChar = openChar;
+openChar = function(c){
+  currentCharIndex = chars.indexOf(c);
+  originalOpenChar(c);
+};
+
+function prevChar(){
+  currentCharIndex =
+    (currentCharIndex - 1 + chars.length) % chars.length;
+  originalOpenChar(chars[currentCharIndex]);
+}
+
+function nextChar(){
+  currentCharIndex =
+    (currentCharIndex + 1) % chars.length;
+  originalOpenChar(chars[currentCharIndex]);
+}
+
+const chars=[
+  {name:"1xEJ",birthday:"September 28",height:"200cm",weight:"67g",desc:"An umamusme addicted to gambling. Who claims to know guranteed wins, but tends to lose more often. Tends to always chase after money showing immense focus as long as money is on the line. Known for never giving up, hoping that this time the odds will turn into his favor.",img:"https://raw.githubusercontent.com/miyugameplayz-spec/Clarence-Birthday-Surprise-project-/refs/heads/main/1xEJ%20Icon.jpg",video:"char1.mp4"},
+
+  {name:"El Remuda Pasa",birthday:"September 11",height:"235cm",weight:"10g",desc:'Afraid of Bingo. Their dorm is often used for parties. Roommates with El Rancho Pasa.',img:"https://raw.githubusercontent.com/miyugameplayz-spec/Clarence-Birthday-Surprise-project-/refs/heads/main/El%20Remuda%20Pasa.png",video:"https://drive.google.com/file/d/10n8fUne5Fcj3XQy7Wkxh71U5KPf2k62S/preview"},
+
+  {name:"JM opera",birthday:"June 27",height:"No info",weight:"Still No info",desc:"Not much is known about this uma apart from their name and birthday, no one has even seen their real face or form as this uma prefers to race in cosplay. Rumors say that they once finished 1st place whilst carrying a coffin and a greatsword.",img:"https://raw.githubusercontent.com/miyugameplayz-spec/Clarence-Birthday-Surprise-project-/refs/heads/main/JM%20opera%20final.png",video:"https://drive.google.com/file/d/1qTsMmxN0xqNKp7Y78tCq9BYdyHtbhyjG/preview"},
+
+  {name:"Friozensky",
+  birthday:"November 28",
+  height:"267cm",
+  weight:"BMW M5 SEDAN",
+  desc:`Came from an accident in a car factory, accidentally made a hybrid horse.
+  Instead of muscle power we use "horsepower"`,
+  img:"https://raw.githubusercontent.com/miyugameplayz-spec/Clarence-Birthday-Surprise-project-/refs/heads/main/friozensky.jpg",
+  video:"https://drive.google.com/file/d/1kvTlXJZ39G7vfp2Fj9Duq6jl7Bw_c41s/preview"
+},
+
+  {name:"The Goodrich Marauder",birthday:"September 9",height:"170cm",weight:"Classified. Last scale that tried stopped working.",desc:"Speaks with total confidence, even when clearly making things up on the spot, and somehow people still tolerate him. Rivals with a certain uma from montalban hills.",img: "https://raw.githubusercontent.com/miyugameplayz-spec/Clarence-Birthday-Surprise-project-/refs/heads/main/goodrch%20maurader.jpg",video:"https://drive.google.com/file/d/1OPbDj4M006DZ7AwYKt4_q15X7FelAtXI/preview"},
+
+  {name:"James Brian",birthday:"April 4",height:"like 1% taller than Jonathan Hayahide",weight:"99% Lower than Jonathan Hayahide",desc:"James Brian, get it?  funny. Twinning with Jonathan because yes, we do somehow always see each other at the most random places. Hi James.",img:"https://raw.githubusercontent.com/miyugameplayz-spec/Clarence-Birthday-Surprise-project-/refs/heads/main/james%20brian.jpg",video:"https://drive.google.com/file/d/1CCSL0q2gwlUIZQ1aT3Uiwadm0SqWDrjG/preview"},
+  
+  {name:"Jonathan Hayahide",birthday:"June 16",height:"271cm",weight:"Olympic Swimming Pool",desc:"The ultimate nonchalant lazy genius. Former addicted Umamusume trainer and track analyst. Twinning with James Brian because we always see other in the most random places. Likes bananas (might be allergic though).",img:"https://raw.githubusercontent.com/miyugameplayz-spec/Clarence-Birthday-Surprise-project-/refs/heads/main/jonathan%20icon.png",video:"https://drive.google.com/file/d/1gToBAH4MZPQGtg_mUukEhL7gCttiiCTF/preview"},
+
+  {name:"Journeysarus",birthday:"January 31",height:"157cm",weight:"How many dinosaurs can cross a river..? Ask the meteorite!!",desc:"Some umas have lived as far as 80 years old but this one has seen the start and ends of life times! They say she is as ancient as the first-ever dinosaur, or maybe she was the first. She seems to always enjoy kicking her trainer.",img:"https://raw.githubusercontent.com/miyugameplayz-spec/Clarence-Birthday-Surprise-project-/refs/heads/main/Journeysaurus%20Icon.png", video:"https://drive.google.com/file/d/1l-PoEX6a_WaAj35t8mWm7MtfCHLs3BWl/preview"},
+
+  {name:"Kalvinism Cycle",birthday:"September 29",height:"2067mm",weight:"67000mg",desc:"An uma made artificially through natural processes blessed by the sweat of max verstappen and the tears of usain bolt, An anomaly with a base speed stat of 1000 never having seen the back of another uma. clarence is tattoed on its ass",img:"https://raw.githubusercontent.com/miyugameplayz-spec/Clarence-Birthday-Surprise-project-/refs/heads/main/kalvin%20icon.png",video:"https://drive.google.com/file/d/1HxW1pVS5VjyLxwjMwjxVn1W8MGVjdvjm/preview"},
+
+  {name:"Makitanesoonhauser",birthday:"May 7 (6/7)",height:"187cm",weight:"🐴 horse (heavier than normal)",desc:"Fumbling only at crucial moments 67% of the time, The ups and downs make this horse completely average. rivals with the horse El Rancho Pasa ",img:"https://raw.githubusercontent.com/miyugameplayz-spec/Clarence-Birthday-Surprise-project-/refs/heads/main/makitanesoonhauser.png",video:"https://drive.google.com/file/d/1lRWJpgnnHXyKAkoyj8YqaraH3cLMmD3Y/preview"},
+
+  {name:"Twin Sambo",birthday:"August 11",height:"1 apple",weight:"uhhh 2 apples",desc:"Hey what is this thing? No seriously what the heck is this thing where did it come from?!",img:"https://raw.githubusercontent.com/miyugameplayz-spec/Clarence-Birthday-Surprise-project-/refs/heads/main/sam%20icon.jpg",video:"https://drive.google.com/file/d/1qQD0Esr8BdKa8BpGBg8lmhIRcRbKRmFg/preview"},
+
+  {name:"El Rancho Pasa",birthday:"August 1",height:"235cm", weight:"10g",desc:"An Umamusme birthed like a phoenix from the burnt down and blazing ashes of Rehador. He frequents the Marista Ovaló racetrack where he often runs into other racers looking to challenge him to a goon battle. He is roommates with El Remuda Pasa. He is rivals with Makitanesoonhauser. ",img:"https://raw.githubusercontent.com/miyugameplayz-spec/Clarence-Birthday-Surprise-project-/refs/heads/main/sambelay%20icon.png",video:"https://drive.google.com/file/d/1ep6xoR1KgXYih01J2yjv3zOyLEkq6lMB/preview"}
+];
+
+
+const grid=document.getElementById("charGrid");
+const profile=document.getElementById("charProfile");
+const content=document.getElementById("profileContent");
+
+chars.forEach(c=>{
+  const d=document.createElement("div");
+  d.className="char-card";
+  d.innerHTML=`<img src="${c.img}"><strong>${c.name}</strong>`;
+  d.onclick=()=>openChar(c);
+  grid.appendChild(d);
+});
+
+function openChar(c){
+  grid.style.display="none";
+  profile.style.display="block";
+  content.innerHTML=`
+    <div class="profile-art"><img src="${c.img}"></div>
+    <div class="profile-info">
+      <h2>${c.name}</h2>
+      <div class="profile-stats">
+        <strong>Birthday</strong><span>${c.birthday}</span>
+        <strong>Height</strong><span>${c.height}</span>
+        <strong>Weight</strong><span>${c.weight}</span>
+      </div>
+      <p>${c.desc}</p>
+      <div class="profile-video">
+        <iframe
+    src="${c.video}"
+    allow="autoplay; fullscreen"
+    allowfullscreen>
+        </iframe>
+      </div>
+    </div>`;
+}
+
+function backToGrid(){
+  profile.style.display="none";
+  grid.style.display="grid";
+}
+
+function scrollTo(id){
+  document.getElementById(id).scrollIntoView({behavior:"smooth"});
+}
+
+const obs=new IntersectionObserver(e=>{
+  e.forEach(x=>x.isIntersecting && x.target.classList.add('show'));
+},{threshold:.15});
+document.querySelectorAll('section').forEach(s=>obs.observe(s));
+
+let galleryIndex = 0;
+const itemsPerPage = 3;
+const galleryTrack = document.getElementById("galleryTrack");
+const totalItems = galleryTrack.children.length;
+const maxIndex = Math.ceil(totalItems / itemsPerPage) - 1;
+
+function updateGallery(){
+  const percentage = galleryIndex * 100;
+  galleryTrack.style.transform = `translateX(-${percentage}%)`;
+}
+
+function nextGallery(){
+  if(galleryIndex < maxIndex){
+    galleryIndex++;
+    updateGallery();
+  }
+}
+
+function prevGallery(){
+  if(galleryIndex > 0){
+    galleryIndex--;
+    updateGallery();
+  }
+}
+
+</script>
+
+</body>
+</html>
